@@ -20,9 +20,14 @@ const config: HardhatUserConfig = {
     },
   },
   networks: {
-    goerli: {
-      chainId: 5,
-      url: "https://rpc.goerli.mudit.blog",
+    hardhat: {
+      forking: {
+        url: "https://ethereum-ropsten-rpc.allthatnode.com",
+      },
+    },
+    ropsten: {
+      chainId: 3,
+      url: "https://ethereum-ropsten-rpc.allthatnode.com",
       accounts,
     },
     "moombeam-alpha": {
