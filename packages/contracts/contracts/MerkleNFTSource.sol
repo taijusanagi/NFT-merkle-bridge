@@ -30,6 +30,7 @@ contract MerkleNFTSource is AxelarExecutable, ERC721Enumerable {
     _mint(to, tokenId);
   }
 
+  // check all proof then send root by cross-chain messaging
   function sendMerkleRoot(
     string calldata destinationChain,
     string calldata destinationAddress,
@@ -71,6 +72,7 @@ contract MerkleNFTSource is AxelarExecutable, ERC721Enumerable {
     return keccak256(abi.encodePacked(tokenId, holder));
   }
 
+  // this stops the nft transfering
   function _transfer(
     address,
     address,

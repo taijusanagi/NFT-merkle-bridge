@@ -20,7 +20,7 @@ describe("Integration", function () {
     const MerkleNFTSource = await ethers.getContractFactory("MerkleNFTSource");
     const merkleNFTSource = await MerkleNFTSource.deploy(gateway, gasReceiver, mintPrice, supplyLimit);
 
-    const MerkleNFTTarget = await ethers.getContractFactory("MerkleNFTTargetMock"); // this is using mock which has setRoot
+    const MerkleNFTTarget = await ethers.getContractFactory("MerkleNFTTarget");
     const merkleNFTTarget = await MerkleNFTTarget.deploy(gateway, sourceChain, merkleNFTSource.address);
     return {
       owner,

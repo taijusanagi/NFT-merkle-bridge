@@ -28,7 +28,9 @@ async function main() {
   const { hash } = await merkleNFTSource.sendMerkleRoot(axelar.target.name, bridge.target.contract, root, proofs, {
     value: "1000000000000000",
   });
-  console.log(hash);
+  console.log("hash", hash);
+  console.log("root", root);
+  console.log("proofs", proofs);
 }
 
 main().catch((error) => {

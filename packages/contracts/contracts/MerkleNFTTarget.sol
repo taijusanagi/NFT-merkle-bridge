@@ -22,6 +22,7 @@ contract MerkleNFTTarget is AxelarExecutable, ERC721Enumerable {
     sourceAddress = sourceAddress_;
   }
 
+  // minter information is messaged from source chain by axelar cross-chain call
   function mint(
     address to,
     uint256 tokenId,
@@ -34,20 +35,28 @@ contract MerkleNFTTarget is AxelarExecutable, ERC721Enumerable {
     _mint(to, tokenId);
   }
 
+  // this is only for testing
+  function setRoot(bytes32 root_) public {
+    root = root_;
+  }
+
   function _execute(
     string calldata sourceChain_,
     string calldata sourceAddress_,
     bytes calldata payload_
   ) internal override {
-    require(root == "", "MerkleNFTTarget: root already set");
-    require(
-      keccak256(abi.encodePacked(sourceChain_)) == keccak256(abi.encodePacked(sourceChain)),
-      "MerkleNFTTarget: source chain invalid"
-    );
-    require(
-      keccak256(abi.encodePacked(sourceAddress_)) == keccak256(abi.encodePacked(sourceAddress)),
-      "MerkleNFTTarget: source address invalid"
-    );
+    /*
+     * @dev this is disabled for smooth testnet integration test
+     */
+    // require(root == "", "MerkleNFTTarget: root already set");
+    // require(
+    //   keccak256(abi.encodePacked(sourceChain_)) == keccak256(abi.encodePacked(sourceChain)),
+    //   "MerkleNFTTarget: source chain invalid"
+    // );
+    // require(
+    //   keccak256(abi.encodePacked(sourceAddress_)) == keccak256(abi.encodePacked(sourceAddress)),
+    //   "MerkleNFTTarget: source address invalid"
+    // );
     root = abi.decode(payload_, (bytes32));
     emit Set(root);
   }
