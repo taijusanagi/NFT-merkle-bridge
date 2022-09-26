@@ -35,7 +35,9 @@ contract MerkleNFTTarget is AxelarExecutable, ERC721Enumerable {
     _mint(to, tokenId);
   }
 
-  // this is only for testing
+  /*
+   * @dev this is only for testing
+   */
   function setRoot(bytes32 root_) public {
     root = root_;
   }

@@ -35,6 +35,12 @@ const config: HardhatUserConfig = {
       accounts,
     },
   },
+  etherscan: {
+    apiKey: {
+      ropsten: process.env.ETHERSCAN_API_KEY || "",
+      moonbaseAlpha: process.env.ETHERSCAN_API_KEY || "",
+    },
+  },
 };
 
 export default config;
