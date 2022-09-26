@@ -1,6 +1,5 @@
 import "@nomicfoundation/hardhat-toolbox";
 import "@openzeppelin/hardhat-upgrades";
-import "hardhat-deploy";
 
 import * as dotenv from "dotenv";
 import { HardhatUserConfig } from "hardhat/config";
@@ -30,9 +29,9 @@ const config: HardhatUserConfig = {
       url: "https://ethereum-ropsten-rpc.allthatnode.com",
       accounts,
     },
-    "moombeam-alpha": {
+    moonbeam: {
       chainId: 1287,
-      url: "https://rpc.api.moonbase.moonbeam.network",
+      url: "https://moonbeam-alpha.api.onfinality.io/public",
       accounts,
     },
   },

@@ -4,20 +4,21 @@ import { ethers } from "hardhat";
 import keccak256 from "keccak256";
 import MerkleTree from "merkletreejs";
 
+import { mintPrice, supplyLimit } from "../constants/static";
+
 // this is using Ropsten forking
 // docs.axelar.dev/dev/build/contract-addresses/testnet
 const gateway = "0xBC6fcce7c5487d43830a219CA6E7B83238B41e71"; // Gateway contract at Ropsten
-const mintPrice = 1;
-const supplyLimit = 3;
+const gasReceiver = "0xbE406F0189A0B4cf3A05C286473D23791Dd44Cc6";
 
 const sourceChain = "Ethereum"; // Test is done in single chain
-const destinationChain = "Ethereum"; // Test is done in single chain
+const destinationChain = "Moonbeam"; // Test is done in single chain
 
 describe("Integration", function () {
   async function fixture() {
     const [owner, other] = await ethers.getSigners();
     const MerkleNFTSource = await ethers.getContractFactory("MerkleNFTSource");
-    const merkleNFTSource = await MerkleNFTSource.deploy(gateway, mintPrice, supplyLimit);
+    const merkleNFTSource = await MerkleNFTSource.deploy(gateway, gasReceiver, mintPrice, supplyLimit);
 
     const MerkleNFTTarget = await ethers.getContractFactory("MerkleNFTTargetMock"); // this is using mock which has setRoot
     const merkleNFTTarget = await MerkleNFTTarget.deploy(gateway, sourceChain, merkleNFTSource.address);

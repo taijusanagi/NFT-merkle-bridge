@@ -1,17 +1,16 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.0;
 
-import "hardhat/console.sol";
-
 import {AxelarExecutable} from "@axelar-network/axelar-gmp-sdk-solidity/contracts/executables/AxelarExecutable.sol";
 
 import {ERC721, ERC721Enumerable} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import {MerkleProof} from "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 
 contract MerkleNFTTarget is AxelarExecutable, ERC721Enumerable {
+  event Set(bytes32);
+
   string public sourceChain;
   string public sourceAddress;
-
   bytes32 public root;
 
   constructor(
@@ -50,5 +49,6 @@ contract MerkleNFTTarget is AxelarExecutable, ERC721Enumerable {
       "MerkleNFTTarget: source address invalid"
     );
     root = abi.decode(payload_, (bytes32));
+    emit Set(root);
   }
 }

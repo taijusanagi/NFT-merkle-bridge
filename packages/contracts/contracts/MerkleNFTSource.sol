@@ -1,22 +1,24 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.0;
 
-import "hardhat/console.sol";
-
 import {AxelarExecutable} from "@axelar-network/axelar-gmp-sdk-solidity/contracts/executables/AxelarExecutable.sol";
 
 import {ERC721, ERC721Enumerable} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import {MerkleProof} from "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
+import {IAxelarGasService} from "@axelar-network/axelar-gmp-sdk-solidity/contracts/interfaces/IAxelarGasService.sol";
 
 contract MerkleNFTSource is AxelarExecutable, ERC721Enumerable {
   uint256 public immutable mintPrice;
   uint256 public immutable supplyLimit;
+  IAxelarGasService public immutable gasReceiver;
 
   constructor(
     address gateway_,
+    address gasReceiver_,
     uint256 mintPrice_,
     uint256 supplyLimit_
   ) AxelarExecutable(gateway_) ERC721("MerkleNFTSource", "MNFTS") {
+    gasReceiver = IAxelarGasService(gasReceiver_);
     mintPrice = mintPrice_;
     supplyLimit = supplyLimit_;
   }
@@ -38,6 +40,15 @@ contract MerkleNFTSource is AxelarExecutable, ERC721Enumerable {
     require(totalSupply == supplyLimit, "MerkleNFTSource: mint not closed");
     require(verifyMerkleTree(merkleRoot, proofs), "MerkleNFTSource: merkle tree is invalid");
     bytes memory payload = abi.encode(merkleRoot);
+    if (msg.value > 0) {
+      gasReceiver.payNativeGasForContractCall{value: msg.value}(
+        address(this),
+        destinationChain,
+        destinationAddress,
+        payload,
+        msg.sender
+      );
+    }
     gateway.callContract(destinationChain, destinationAddress, payload);
   }
 
